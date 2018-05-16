@@ -126,4 +126,27 @@ class GridIconToggleView (ctx : Context) : View(ctx) {
             state.startUpdating(startcb)
         }
     }
+
+    data class Renderer(var view : GridIconToggleView) {
+
+        val gridIconToggle : GridIconToggle = GridIconToggle(0)
+
+        val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#212121"))
+            gridIconToggle.draw(canvas, paint)
+            animator.animate {
+                gridIconToggle.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            gridIconToggle.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
