@@ -25,4 +25,26 @@ class GridIconToggleView (ctx : Context) : View(ctx) {
     override fun onDraw(canvas : Canvas) {
 
     }
+
+    data class State (var scale : Float = 0f, var deg : Double = 0.0, var dir : Float = 0f, var prevDeg : Double = 0.0) {
+
+        fun update(stopcb : (Float) -> Unit) {
+            deg += (Math.PI/16) * dir
+            scale = Math.sin(deg).toFloat()
+            if (Math.abs(deg - prevDeg) > Math.PI/2) {
+                deg = prevDeg + (Math.PI/2) * dir
+                dir = 0f
+                scale = Math.sin(deg).toFloat()
+                prevDeg = deg
+                stopcb(scale)
+            }
+        }
+
+        fun startUpdating(startcb : () -> Unit) {
+            if (dir == 0f) {
+                dir = 1 - 2 * scale
+                startcb()
+            }
+        }
+    }
 }
