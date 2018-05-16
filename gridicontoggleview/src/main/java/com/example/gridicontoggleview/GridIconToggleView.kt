@@ -4,6 +4,7 @@ package com.example.gridicontoggleview
  * Created by anweshmishra on 16/05/18.
  */
 
+import android.app.Activity
 import android.view.View
 import android.view.MotionEvent
 import android.content.Context
@@ -149,6 +150,14 @@ class GridIconToggleView (ctx : Context) : View(ctx) {
             gridIconToggle.startUpdating {
                 animator.start()
             }
+        }
+    }
+
+    companion object {
+        fun create(activity : Activity) : GridIconToggleView {
+            val view : GridIconToggleView = GridIconToggleView(activity)
+            activity.setContentView(view)
+            return view 
         }
     }
 }
