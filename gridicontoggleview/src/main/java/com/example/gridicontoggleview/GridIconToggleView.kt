@@ -8,6 +8,7 @@ import android.view.View
 import android.view.MotionEvent
 import android.content.Context
 import android.graphics.*
+import android.util.Log
 
 class GridIconToggleView (ctx : Context) : View(ctx) {
 
@@ -74,6 +75,55 @@ class GridIconToggleView (ctx : Context) : View(ctx) {
                 animated = false
             }
         }
+    }
 
+    data class GridIconToggle(var i : Int, val state : State = State()) {
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            val w : Float = canvas.width.toFloat()
+            val h : Float = canvas.height.toFloat()
+            val r : Int = 0
+            val g : Int = 137
+            val b : Int = 123
+            paint.strokeWidth = Math.min(w, h)/50
+            paint.strokeCap = Paint.Cap.ROUND
+            val wGap : Float = Math.min(w, h) * 0.35f
+            val updateColor : ((Int, Float) -> Int) = {cf, scale ->
+                Log.d("colorFactor:",cf.toString())
+                255 + ((cf - 255) * scale).toInt()
+            }
+            val hGap : Float = 2 * h/5 * state.scale
+            val radius : Float = Math.min(w,h)/20
+            canvas.save()
+            canvas.translate(w/2, h/2)
+            for (i in 0..2) {
+                canvas.save()
+                canvas.translate(0f, (1 - i) * hGap)
+                for (j in 0..2) {
+                    canvas.save()
+                    canvas.translate((1-j) * wGap, 0f)
+                    paint.color = Color.rgb(updateColor(r, state.scale), updateColor(g, state.scale), updateColor(b, state.scale))
+                    canvas.drawCircle(0f, 0f, radius, paint)
+                    paint.color = Color.rgb(updateColor(r, 1 - state.scale), updateColor(g, 1 - state.scale), updateColor(b, 1 - state.scale))
+                    for (r in 0..1) {
+                        canvas.save()
+                        canvas.rotate(90f * i * (1 - state.scale))
+                        canvas.drawLine(0f, -radius/2, 0f, radius/2, paint)
+                        canvas.restore()
+                    }
+                    canvas.restore()
+                }
+                canvas.restore()
+            }
+            canvas.restore()
+        }
+
+        fun update(stopcb : (Float) -> Unit) {
+            state.update(stopcb)
+        }
+
+        fun startUpdating(startcb : () -> Unit) {
+            state.startUpdating(startcb)
+        }
     }
 }
