@@ -108,10 +108,10 @@ class GridIconToggleView (ctx : Context) : View(ctx) {
                     paint.color = Color.rgb(updateColor(r, state.scale), updateColor(g, state.scale), updateColor(b, state.scale))
                     canvas.drawCircle(0f, 0f, radius, paint)
                     paint.color = Color.rgb(updateColor(r, 1 - state.scale), updateColor(g, 1 - state.scale), updateColor(b, 1 - state.scale))
-                    for (r in 0..1) {
+                    for (e in 0..1) {
                         canvas.save()
-                        canvas.rotate(90f * i * (1 - state.scale))
-                        canvas.drawLine(0f, -radius/2, 0f, radius/2, paint)
+                        canvas.rotate(90f * e * (1 - state.scale))
+                        canvas.drawLine(-radius/2, 0f,radius/2, 0f, paint)
                         canvas.restore()
                     }
                     canvas.restore()
@@ -157,7 +157,7 @@ class GridIconToggleView (ctx : Context) : View(ctx) {
         fun create(activity : Activity) : GridIconToggleView {
             val view : GridIconToggleView = GridIconToggleView(activity)
             activity.setContentView(view)
-            return view 
+            return view
         }
     }
 }
